@@ -182,13 +182,50 @@ npm run build
 node build/html-to-png.js ./examples/example.html
 ```
 
+### PNG to PDF Converter (Batch)
+
+Converts all PNG files in a directory to PDF format. Automatically skips PNG files that already have a corresponding PDF with the same name.
+
+```bash
+npx ts-node src/png-to-pdf.ts [options]
+# or after building:
+node build/png-to-pdf.js [options]
+```
+
+**Options:**
+- `-i, --input <dir>` - Input directory containing PNG files (default: `./dist`)
+- `-o, --output <dir>` - Output directory for PDF files (default: same as input)
+- `-f, --force` - Overwrite existing PDF files
+- `-h, --help` - Show help message
+
+**Examples:**
+
+```bash
+# Convert all PNGs in ./dist (skips if PDF already exists)
+npx ts-node src/png-to-pdf.ts
+
+# Convert PNGs from a custom directory
+npx ts-node src/png-to-pdf.ts -i ./my-images
+
+# Specify different input and output directories
+npx ts-node src/png-to-pdf.ts -i ./dist -o ./pdfs
+
+# Force overwrite existing PDFs
+npx ts-node src/png-to-pdf.ts --force
+
+# Using npm script
+npm run png-to-pdf
+npm run png-to-pdf:dev
+```
+
 ## Project Structure
 
 ```
 html-to-pdf-png/
 ├── src/                      # TypeScript source files
-│   ├── html-to-pdf.ts        # PDF conversion script
-│   └── html-to-png.ts        # PNG conversion script
+│   ├── html-to-pdf.ts        # HTML to PDF conversion script
+│   ├── html-to-png.ts        # HTML to PNG conversion script
+│   └── png-to-pdf.ts         # PNG to PDF batch converter
 ├── examples/                 # Example HTML files
 │   ├── example.html          # Example with Mermaid diagrams
 │   └── example.md            # Source markdown

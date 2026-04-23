@@ -9,6 +9,8 @@
     "png": "npm run build && node build/html-to-png.js",
     "pdf:dev": "npx ts-node src/html-to-pdf.ts",
     "png:dev": "npx ts-node src/html-to-png.ts",
+    "png-to-pdf": "npm run build && node build/png-to-pdf.js",
+    "png-to-pdf:dev": "npx ts-node src/png-to-pdf.ts",
     "example:pdf": "npm run build && node build/html-to-pdf.js ./examples/example.html",
     "example:png": "npm run build && node build/html-to-png.js ./examples/example.html",
     "example:all": "npm run build && node build/html-to-pdf.js ./examples/example.html && node build/html-to-png.js ./examples/example.html",
