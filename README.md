@@ -1,6 +1,6 @@
 # HTML to PDF & PNG Converter
 
-A powerful and easy-to-use CLI tool to convert any HTML file to **PDF** or **high-quality PNG** images using Playwright. Perfect for documentation, diagrams, reports, and any HTML content.
+A powerful and easy-to-use CLI tool to convert any HTML file to **PDF** or **high-quality PNG** images using Playwright. Built with TypeScript for type safety and better developer experience. Perfect for documentation, diagrams, reports, and any HTML content.
 
 ## Features
 
@@ -24,6 +24,7 @@ A powerful and easy-to-use CLI tool to convert any HTML file to **PDF** or **hig
 
 - **Node.js** (version 16 or higher)
 - **npm** (included with Node.js)
+- **TypeScript** (installed automatically via npm)
 
 ## Installation
 
@@ -46,16 +47,30 @@ A powerful and easy-to-use CLI tool to convert any HTML file to **PDF** or **hig
 
 ## Quick Start
 
-### Convert a Single HTML File
+### Development Mode (TypeScript - Direct)
 
 **To PDF:**
 ```bash
-node html-to-pdf.js ./examples/example.html
+npx ts-node src/html-to-pdf.ts ./examples/example.html
 ```
 
 **To PNG:**
 ```bash
-node html-to-png.js ./examples/example.html
+npx ts-node src/html-to-png.ts ./examples/example.html
+```
+
+### Build and Run (Compiled JavaScript)
+
+**To PDF:**
+```bash
+npm run pdf
+# Then: node build/html-to-pdf.js ./examples/example.html
+```
+
+**To PNG:**
+```bash
+npm run png
+# Then: node build/html-to-png.js ./examples/example.html
 ```
 
 ### Run Examples
@@ -63,24 +78,41 @@ node html-to-png.js ./examples/example.html
 The repository includes an example HTML file with Mermaid diagrams:
 
 ```bash
-# Convert example to PDF
+# Build TypeScript first, then convert example to PDF
 npm run example:pdf
 
-# Convert example to PNG
+# Build TypeScript first, then convert example to PNG
 npm run example:png
 
-# Convert example to both PDF and PNG
+# Build TypeScript first, then convert example to both PDF and PNG
 npm run example:all
+
+# Or run directly with ts-node (no build step)
+npx ts-node src/html-to-pdf.ts ./examples/example.html
+npx ts-node src/html-to-png.ts ./examples/example.html
 ```
 
 Results will be saved to the `dist/` folder.
 
 ## CLI Usage
 
-### PDF Converter
+### Development (TypeScript)
 
 ```bash
-node html-to-pdf.js <input-html-file> [options]
+npx ts-node src/html-to-pdf.ts <input-html-file> [options]
+npx ts-node src/html-to-png.ts <input-html-file> [options]
+```
+
+### Production (Compiled)
+
+First build the TypeScript:
+```bash
+npm run build
+```
+
+Then run the compiled JavaScript:
+```bash
+node build/html-to-pdf.js <input-html-file> [options]
 ```
 
 **Options:**
@@ -88,26 +120,39 @@ node html-to-pdf.js <input-html-file> [options]
 - `-f, --filename <name>` - Output filename without extension (default: input filename)
 - `-h, --help` - Show help message
 
-**Examples:**
+**Examples (TypeScript - Development):**
 
 ```bash
 # Basic usage - outputs to ./dist/example.pdf
-node html-to-pdf.js ./examples/example.html
+npx ts-node src/html-to-pdf.ts ./examples/example.html
 
 # Custom output directory
-node html-to-pdf.js ./my-file.html -o ./my-documents
+npx ts-node src/html-to-pdf.ts ./my-file.html -o ./my-documents
 
 # Custom filename
-node html-to-pdf.js ./examples/example.html -f my-report
+npx ts-node src/html-to-pdf.ts ./examples/example.html -f my-report
 
 # Both custom directory and filename
-node html-to-pdf.js ./index.html --output ./exports --filename homepage
+npx ts-node src/html-to-pdf.ts ./index.html --output ./exports --filename homepage
+```
+
+**Examples (Compiled JavaScript - Production):**
+
+```bash
+# First build
+npm run build
+
+# Then run
+node build/html-to-pdf.js ./examples/example.html
+node build/html-to-pdf.js ./my-file.html -o ./my-documents -f report
 ```
 
 ### PNG Converter
 
 ```bash
-node html-to-png.js <input-html-file> [options]
+npx ts-node src/html-to-png.ts <input-html-file> [options]
+# or after building:
+node build/html-to-png.js <input-html-file> [options]
 ```
 
 **Options:**
@@ -119,28 +164,37 @@ node html-to-png.js <input-html-file> [options]
 
 ```bash
 # Basic usage - outputs to ./dist/example.png
-node html-to-png.js ./examples/example.html
+npx ts-node src/html-to-png.ts ./examples/example.html
 
 # Custom output directory
-node html-to-png.js ./my-file.html -o ./my-images
+npx ts-node src/html-to-png.ts ./my-file.html -o ./my-images
 
 # Custom filename
-node html-to-png.js ./examples/example.html -f screenshot
+npx ts-node src/html-to-png.ts ./examples/example.html -f screenshot
 
 # Both custom directory and filename
-node html-to-png.js ./index.html --output ./exports --filename homepage
+npx ts-node src/html-to-png.ts ./index.html --output ./exports --filename homepage
+```
+
+Or with compiled JavaScript:
+```bash
+npm run build
+node build/html-to-png.js ./examples/example.html
 ```
 
 ## Project Structure
 
 ```
 html-to-pdf-png/
+├── src/                      # TypeScript source files
+│   ├── html-to-pdf.ts        # PDF conversion script
+│   └── html-to-png.ts        # PNG conversion script
 ├── examples/                 # Example HTML files
 │   ├── example.html          # Example with Mermaid diagrams
 │   └── example.md            # Source markdown
-├── dist/                     # Default output folder (created on first run)
-├── html-to-pdf.js            # PDF conversion script
-├── html-to-png.js            # PNG conversion script
+├── build/                    # Compiled JavaScript (generated by tsc)
+├── dist/                     # Default output folder for conversions
+├── tsconfig.json             # TypeScript configuration
 ├── package.json              # Dependencies and npm scripts
 └── README.md                 # This file
 ```
@@ -158,17 +212,27 @@ Install the browsers with:
 npx playwright install chromium
 ```
 
+### TypeScript Type Errors
+
+If you see errors like "Cannot find module 'path'" or "Cannot find name 'process'", you need to install the Node.js type definitions:
+
+```bash
+npm install
+```
+
+This will install `@types/node` which provides TypeScript definitions for Node.js built-in modules.
+
 ### Diagrams not appearing in PDF/PNG
 
 The script automatically waits 30 seconds for Mermaid diagrams to render. If your connection is slow, you can increase the wait time in the scripts:
 
-**For PDF (`html-to-pdf.js`):**
-```javascript
+**For PDF (`src/html-to-pdf.ts`):**
+```typescript
 await page.waitForTimeout(5000); // Increase to 5 seconds or more
 ```
 
-**For PNG (`html-to-png.js`):**
-```javascript
+**For PNG (`src/html-to-png.ts`):**
+```typescript
 await page.waitForTimeout(5000); // Increase to 5 seconds or more
 ```
 
@@ -177,23 +241,29 @@ await page.waitForTimeout(5000); // Increase to 5 seconds or more
 If the process fails due to memory (especially with PNG images due to their size), try closing other applications or use:
 
 ```bash
-# For PDF
-node --max-old-space-size=4096 html-to-pdf.js ./my-file.html
+# For PDF (after building)
+node --max-old-space-size=4096 build/html-to-pdf.js ./my-file.html
 
-# For PNG
-node --max-old-space-size=4096 html-to-png.js ./my-file.html
+# For PNG (after building)
+node --max-old-space-size=4096 build/html-to-png.js ./my-file.html
+
+# Or with ts-node
+node --max-old-space-size=4096 -r ts-node/register src/html-to-pdf.ts ./my-file.html
 ```
 
 PNG images consume more memory because they capture the full page in high resolution.
 
 ## Technical Notes
 
+- Built with **TypeScript** for type safety and better IDE support
 - Uses **Chromium** in headless mode (no GUI)
 - Viewport configured to **1920x1080** to capture desktop layout
 - Actively waits for all Mermaid diagrams to render before capturing
 - PDF includes headers/footers with automatic page numbering
 - PNG captures in **full-page** format including all scrollable content
 - Both formats maintain the visual quality of the original HTML
+- TypeScript compiles to `build/` folder; run with `node build/*.js`
+- Or use `ts-node` for direct TypeScript execution without compilation
 
 ## Use Cases
 

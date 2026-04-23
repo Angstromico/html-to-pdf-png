@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# TypeScript build output
+build/
+
 # Output folder (user-generated content)
 dist/
 

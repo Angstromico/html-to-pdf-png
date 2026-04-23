@@ -4,7 +4,8 @@
  * HTML to PNG Converter using Playwright
  * 
  * Usage:
- *   node html-to-png.js <input-html-file> [options]
+ *   npx ts-node src/html-to-png.ts <input-html-file> [options]
+ *   node build/html-to-png.js <input-html-file> [options]
  * 
  * Options:
  *   -o, --output <path>     Output directory (default: ./dist)
@@ -12,23 +13,34 @@
  *   -h, --help              Show help
  * 
  * Examples:
- *   node html-to-png.js ./examples/example.html
- *   node html-to-png.js ./my-file.html -o ./output -f my-image
- *   node html-to-png.js ./examples/example.html --output ./my-images --filename screenshot
+ *   npx ts-node src/html-to-png.ts ./examples/example.html
+ *   node build/html-to-png.js ./my-file.html -o ./output -f my-image
+ *   npx ts-node src/html-to-png.ts ./examples/example.html --output ./my-images --filename screenshot
  */
 
-const { chromium } = require('playwright');
-const path = require('path');
-const fs = require('fs');
+import { chromium, Browser, Page } from 'playwright';
+import * as path from 'path';
+import * as fs from 'fs';
 
-function parseArgs() {
-  const args = process.argv.slice(2);
+interface ParsedArgs {
+  inputFile: string;
+  outputDir: string;
+  outputFilename: string | null;
+}
+
+interface PageDimensions {
+  width: number;
+  height: number;
+}
+
+function parseArgs(): ParsedArgs {
+  const args: string[] = process.argv.slice(2);
   
   if (args.length === 0 || args.includes('-h') || args.includes('--help')) {
     console.log(`
 HTML to PNG Converter
 
-Usage: node html-to-png.js <input-html-file> [options]
+Usage: npx ts-node src/html-to-png.ts <input-html-file> [options]
 
 Arguments:
   input-html-file         Path to the HTML file to convert (required)
@@ -39,20 +51,20 @@ Options:
   -h, --help              Show this help message
 
 Examples:
-  node html-to-png.js ./examples/example.html
-  node html-to-png.js ./my-file.html -o ./output -f my-image
-  node html-to-png.js ./examples/example.html --output ./my-images
+  npx ts-node src/html-to-png.ts ./examples/example.html
+  npx ts-node src/html-to-png.ts ./my-file.html -o ./output -f my-image
+  npx ts-node src/html-to-png.ts ./examples/example.html --output ./my-images
 `);
     process.exit(0);
   }
 
-  const inputFile = args[0];
-  let outputDir = './dist';
-  let outputFilename = null;
+  const inputFile: string = args[0];
+  let outputDir: string = './dist';
+  let outputFilename: string | null = null;
 
   for (let i = 1; i < args.length; i++) {
-    const arg = args[i];
-    const nextArg = args[i + 1];
+    const arg: string = args[i];
+    const nextArg: string | undefined = args[i + 1];
 
     if ((arg === '-o' || arg === '--output') && nextArg) {
       outputDir = nextArg;
@@ -66,18 +78,22 @@ Examples:
   return { inputFile, outputDir, outputFilename };
 }
 
-async function convertHTMLToPNG(inputFile, outputDir, outputFilename) {
+async function convertHTMLToPNG(
+  inputFile: string, 
+  outputDir: string, 
+  outputFilename: string | null
+): Promise<void> {
   console.log('🚀 Starting HTML to PNG conversion...');
   console.log('📸 Mode: Full page capture');
   
   // Resolve paths
-  const htmlPath = path.resolve(inputFile);
-  const outputDirPath = path.resolve(outputDir);
+  const htmlPath: string = path.resolve(inputFile);
+  const outputDirPath: string = path.resolve(outputDir);
   
   // Generate output filename
-  const inputBasename = path.basename(inputFile, path.extname(inputFile));
-  const finalFilename = outputFilename || inputBasename;
-  const outputPath = path.join(outputDirPath, `${finalFilename}.png`);
+  const inputBasename: string = path.basename(inputFile, path.extname(inputFile));
+  const finalFilename: string = outputFilename || inputBasename;
+  const outputPath: string = path.join(outputDirPath, `${finalFilename}.png`);
   
   // Check if input file exists
   if (!fs.existsSync(htmlPath)) {
@@ -88,19 +104,19 @@ async function convertHTMLToPNG(inputFile, outputDir, outputFilename) {
   // Ensure output directory exists
   if (!fs.existsSync(outputDirPath)) {
     fs.mkdirSync(outputDirPath, { recursive: true });
-    console.log(`� Created output directory: ${outputDirPath}`);
+    console.log(`📁 Created output directory: ${outputDirPath}`);
   }
   
   console.log('📄 HTML file:', htmlPath);
   console.log('📁 Output path:', outputPath);
   
   // Launch browser
-  const browser = await chromium.launch({
+  const browser: Browser = await chromium.launch({
     headless: true
   });
   
   try {
-    const page = await browser.newPage();
+    const page: Page = await browser.newPage();
     
     // Configure viewport for desktop (1920x1080)
     await page.setViewportSize({
@@ -119,8 +135,8 @@ async function convertHTMLToPNG(inputFile, outputDir, outputFilename) {
     
     // Wait for Mermaid diagrams to render
     await page.waitForFunction(() => {
-      const mermaidElements = document.querySelectorAll('.mermaid');
-      const renderedElements = document.querySelectorAll('.mermaid svg');
+      const mermaidElements: NodeListOf<Element> = document.querySelectorAll('.mermaid');
+      const renderedElements: NodeListOf<Element> = document.querySelectorAll('.mermaid svg');
       return renderedElements.length === mermaidElements.length && mermaidElements.length > 0;
     }, {
       timeout: 30000 // 30 seconds max
@@ -132,7 +148,7 @@ async function convertHTMLToPNG(inputFile, outputDir, outputFilename) {
     console.log('✅ Diagrams rendered successfully');
     
     // Get full page dimensions
-    const pageDimensions = await page.evaluate(() => {
+    const pageDimensions: PageDimensions = await page.evaluate(() => {
       return {
         width: Math.max(
           document.body.scrollWidth,
@@ -168,13 +184,14 @@ async function convertHTMLToPNG(inputFile, outputDir, outputFilename) {
     console.log('📁 Location:', outputPath);
     
     // Check file size
-    const stats = fs.statSync(outputPath);
-    const sizeMB = (stats.size / 1024 / 1024).toFixed(2);
+    const stats: fs.Stats = fs.statSync(outputPath);
+    const sizeMB: string = (stats.size / 1024 / 1024).toFixed(2);
     console.log(`📊 File size: ${sizeMB} MB`);
     console.log(`📐 Dimensions: ${pageDimensions.width}x${pageDimensions.height}px`);
     
   } catch (error) {
-    console.error('❌ Error during conversion:', error.message);
+    const errorMessage: string = error instanceof Error ? error.message : String(error);
+    console.error('❌ Error during conversion:', errorMessage);
     process.exit(1);
   } finally {
     await browser.close();
@@ -183,5 +200,5 @@ async function convertHTMLToPNG(inputFile, outputDir, outputFilename) {
 }
 
 // Main execution
-const { inputFile, outputDir, outputFilename } = parseArgs();
+const { inputFile, outputDir, outputFilename }: ParsedArgs = parseArgs();
 convertHTMLToPNG(inputFile, outputDir, outputFilename).catch(console.error);
