@@ -1,0 +1,30 @@
+{
+  "name": "html-to-pdf-png",
+  "version": "2.0.0",
+  "description": "Convert any HTML file to PDF and/or high-quality PNG images using Playwright",
+  "main": "html-to-pdf.js",
+  "scripts": {
+    "pdf": "node html-to-pdf.js",
+    "png": "node html-to-png.js",
+    "example:pdf": "node html-to-pdf.js ./examples/example.html",
+    "example:png": "node html-to-png.js ./examples/example.html",
+    "example:all": "node html-to-pdf.js ./examples/example.html && node html-to-png.js ./examples/example.html",
+    "install:browsers": "npx playwright install chromium"
+  },
+  "keywords": [
+    "html",
+    "pdf",
+    "png",
+    "converter",
+    "playwright",
+    "mermaid",
+    "screenshot",
+    "cli"
+  ],
+  "author": "Manuel Morales",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.40.0"
+  },
+  "devDependencies": {}
+}
