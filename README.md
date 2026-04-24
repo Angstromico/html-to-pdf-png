@@ -218,6 +218,56 @@ npm run png-to-pdf
 npm run png-to-pdf:dev
 ```
 
+### Batch HTML to PNG Converter
+
+Converts all HTML files in a directory to PNG format. Automatically skips HTML files that already have a corresponding PNG with the same name. Perfect for processing entire folders of HTML files at once.
+
+```bash
+npx ts-node src/batch-html-to-png.ts [options]
+# or after building:
+node build/batch-html-to-png.js [options]
+```
+
+**Options:**
+- `-i, --input <dir>` - Input directory containing HTML files (default: `./examples`)
+- `-o, --output <dir>` - Output directory for PNG files (default: `./dist`)
+- `-f, --force` - Overwrite existing PNG files
+- `-h, --help` - Show help message
+
+**Examples:**
+
+```bash
+# Convert all HTMLs in ./examples to PNGs in ./dist (skips existing)
+npx ts-node src/batch-html-to-png.ts
+
+# Convert HTMLs from a custom directory
+npx ts-node src/batch-html-to-png.ts -i ./my-html-files
+
+# Specify different input and output directories
+npx ts-node src/batch-html-to-png.ts -i ./examples -o ./my-pngs
+
+# Force overwrite existing PNGs
+npx ts-node src/batch-html-to-png.ts --force
+
+# Using npm script
+npm run batch:png
+npm run batch:png:dev
+```
+
+**Workflow example:**
+```bash
+# First run - converts all HTML files
+npm run batch:png:dev
+# Output: example.png, other-file.png, etc.
+
+# Second run - skips already converted files
+npm run batch:png:dev
+# Output: "Skipped: example.html (PNG already exists)"
+
+# Force re-convert everything
+npm run batch:png:dev -- --force
+```
+
 ## Project Structure
 
 ```
@@ -225,7 +275,8 @@ html-to-pdf-png/
 ├── src/                      # TypeScript source files
 │   ├── html-to-pdf.ts        # HTML to PDF conversion script
 │   ├── html-to-png.ts        # HTML to PNG conversion script
-│   └── png-to-pdf.ts         # PNG to PDF batch converter
+│   ├── png-to-pdf.ts         # PNG to PDF batch converter
+│   └── batch-html-to-png.ts  # Batch HTML to PNG converter
 ├── examples/                 # Example HTML files
 │   ├── example.html          # Example with Mermaid diagrams
 │   └── example.md            # Source markdown
