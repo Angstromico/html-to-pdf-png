@@ -149,17 +149,7 @@ async function convertHTMLToPDF(
       format: 'A4',
       printBackground: true, // Include backgrounds and gradients
       preferCSSPageSize: true,
-      displayHeaderFooter: true,
-      headerTemplate: `
-        <div style="font-size: 10px; text-align: center; width: 100%; padding: 10px 40px;">
-          <span style="color: #666; font-weight: bold;">HTML to PDF Converter</span>
-        </div>
-      `,
-      footerTemplate: `
-        <div style="font-size: 10px; text-align: center; width: 100%; padding: 10px 40px;">
-          Page <span class="pageNumber"></span> of <span class="totalPages"></span>
-        </div>
-      `,
+      displayHeaderFooter: false,
       margin: {
         top: '60px',
         right: '40px',
