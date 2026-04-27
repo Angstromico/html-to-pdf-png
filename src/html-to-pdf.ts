@@ -136,6 +136,9 @@ async function convertHTMLToPDF(
       timeout: 30000 // 30 seconds max
     });
     
+    // Wait for fonts to load (including Arial)
+    await page.evaluate(() => document.fonts.ready);
+    
     // Additional wait to ensure everything is rendered
     await page.waitForTimeout(3000);
     
