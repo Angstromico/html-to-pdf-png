@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama de Flujo - Proceso Complejo de Fabricación</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        @page {
+            size: A4 landscape;
+            margin: 10mm;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-size: 12px;
+        }
+        
+        .page-container {
+            max-width: 297mm;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #667eea;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #5d6d7e;
+            font-size: 1.05em;
+            font-style: italic;
+        }
+        
+        .stages-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stage-box {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-top: 5px solid;
+        }
+        
+        .stage-1 { border-top-color: #3498db; }
+        .stage-2 { border-top-color: #e67e22; }
+        .stage-3 { border-top-color: #27ae60; }
+        
+        .stage-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-align: center;
+            padding: 8px;
+            border-radius: 6px;
+            color: white;
+        }
+        
+        .stage-1 .stage-title { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .stage-2 .stage-title { background: linear-gradient(135deg, #e67e22, #d35400); }
+        .stage-3 .stage-title { background: linear-gradient(135deg, #27ae60, #229954); }
+        
+        .stage-content {
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        
+        .process-step {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
+            position: relative;
+        }
+        
+        .stage-1 .process-step { border-left-color: #3498db; }
+        .stage-2 .process-step { border-left-color: #e67e22; }
+        .stage-3 .process-step { border-left-color: #27ae60; }
+        
+        .step-number {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        
+        .step-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .step-desc {
+            font-size: 0.85em;
+            color: #555;
+        }
+        
+        .step-icon {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .flow-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 3px solid #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .mermaid {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+        
+        .five-m-section {
+            margin-top: 25px;
+        }
+        
+        .five-m-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .five-m-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 5px solid;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .five-m-card .m-title {
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #eee;
+            font-weight: 700;
+        }
+        
+        .five-m-card .m-content {
+            font-size: 0.8em;
+            line-height: 1.5;
+            color: #444;
+        }
+        
+        .materiales { border-left-color: #3498db; }
+        .materiales .m-title { color: #3498db; }
+        
+        .mano { border-left-color: #f39c12; }
+        .mano .m-title { color: #f39c12; }
+        
+        .maquinaria { border-left-color: #e74c3c; }
+        .maquinaria .m-title { color: #e74c3c; }
+        
+        .metodo { border-left-color: #27ae60; }
+        .metodo .m-title { color: #27ae60; }
+        
+        .ambiente { border-left-color: #9b59b6; }
+        .ambiente .m-title { color: #9b59b6; }
+        
+        .connections-legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.85em;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 4px;
+            border-radius: 2px;
+        }
+        
+        .footer-note {
+            text-align: center;
+            color: #5d6d7e;
+            font-size: 0.8em;
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid #d5dbdb;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="header">
+            <h1>DIAGRAMA DE FLUJO DE PROCESO COMPLEJO</h1>
+            <p class="subtitle">Proyecto: Fabricación de tuberías para agua caliente a partir de scrap de PVC y CPVC</p>
+        </div>
+        
+        <!-- Three Stages Overview -->
+        <div class="stages-container">
+            <div class="stage-box stage-1">
+                <div class="stage-title">1. ETAPA DE PREPARACIÓN</div>
+                <div class="stage-content">
+                    <div class="process-step">
+                        <span class="step-icon">⚪</span>
+                        <div class="step-number">Paso 1</div>
+                        <div class="step-name">Selección de Scrap</div>
+                        <div class="step-desc">Clasificación técnica de residuos de PVC y CPVC post-industrial. Control de calidad inicial.</div>
+                    </div>
+                    <div class="process-step">
+                        <span class="step-icon">⚙️</span>
+                        <div class="step-number">Paso 2</div>
+                        <div class="step-name">Acondicionamiento</div>
+                        <div class="step-desc">Trituración mecánica para obtención de hojuelas (pellets). Reducción de tamaño.</div>
+                    </div>
+                    <div class="process-step">
+                        <span class="step-icon">💧</span>
+                        <div class="step-number">Paso 3</div>
+                        <div class="step-name">Lavado y Secado</div>
+                        <div class="step-desc">Eliminación de contaminantes y humedad residual. Secado térmico hasta &lt;0.1% humedad.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stage-box stage-2">
+                <div class="stage-title">2. ETAPA DE PROCESAMIENTO</div>
+                <div class="stage-content">
+                    <div class="process-step">
+                        <span class="step-icon">⚖️</span>
+                        <div class="step-number">Paso 4</div>
+                        <div class="step-name">Dosificación</div>
+                        <div class="step-desc">Punto Crítico: Mezcla proporcional de polímeros (PVC/CPVC). Formulación estequiométrica precisa.</div>
+                    </div>
+                    <div class="process-step">
+                        <span class="step-icon">🔥</span>
+                        <div class="step-number">Paso 5</div>
+                        <div class="step-name">Extrusión</div>
+                        <div class="step-desc">Plastificación y fundición por perfil de temperatura. Rango: 185°C - 195°C.</div>
+                    </div>
+                    <div class="process-step">
+                        <span class="step-icon">📐</span>
+                        <div class="step-number">Paso 6</div>
+                        <div class="step-name">Conformado</div>
+                        <div class="step-desc">Paso por el dado circular para generar la geometría del tubo. Presión de cabezal constante.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stage-box stage-3">
+                <div class="stage-title">3. ETAPA DE FINALIZACIÓN</div>
+                <div class="stage-content">
+                    <div class="process-step">
+                        <span class="step-icon">❄️</span>
+                        <div class="step-number">Paso 7</div>
+                        <div class="step-name">Estabilización</div>
+                        <div class="step-desc">Enfriamiento por inmersión para fijar estructura molecular. Agua a 20°C. Tanque de calibración.</div>
+                    </div>
+                    <div class="process-step">
+                        <span class="step-icon">✅</span>
+                        <div class="step-number">Paso 8</div>
+                        <div class="step-name">Control Final</div>
+                        <div class="step-desc">Verificación de diámetros, espesores y resistencia térmica. Normas COVENIN 656 / 2530.</div>
+                    </div>
+                    <div class="process-step" style="background: linear-gradient(135deg, #d5f5e3, #abebc6); border-left-color: #27ae60;">
+                        <span class="step-icon">📦</span>
+                        <div class="step-number">PRODUCTO</div>
+                        <div class="step-name">Tubería Terminada</div>
+                        <div class="step-desc">Tuberías de PVC/CPVC listas para agua caliente. Etiquetado y almacenamiento.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Flow Diagram -->
+        <div class="flow-section">
+            <div class="section-title">📊 Diagrama de Flujo Detallado del Proceso</div>
+            <div class="mermaid">
+flowchart TB
+    subgraph ETAPA1["🔵 ETAPA 1: PREPARACIÓN"]
+        direction TB
+        E1P1["1. Selección de Scrap<br/>⚪ Clasificación técnica<br/>Materiales: Scrap limpio"] 
+        E1P2["2. Acondicionamiento<br/>⚙️ Trituración mecánica<br/>Maquinaria: Molino de cuchillas"]
+        E1P3["3. Lavado y Secado<br/>💧 Eliminación contaminantes<br/>Parámetro: Humedad < 0.1%"]
+        
+        E1P1 --> E1P2 --> E1P3
+    end
+    
+    subgraph ETAPA2["🟠 ETAPA 2: PROCESAMIENTO"]
+        direction TB
+        E2P1{{"4. Dosificación<br/>⚖️ Mezcla PVC/CPVC<br/>⚠️ Punto Crítico: Proporción exacta"}}
+        E2P2["5. Extrusión<br/>🔥 Plastificación 185-195°C<br/>Maquinaria: Extrusora monohusillo"]
+        E2P3["6. Conformado<br/>📐 Dado circular geometría<br/>Método: Presión constante"]
+        
+        E2P1 --> E2P2 --> E2P3
+    end
+    
+    subgraph ETAPA3["🟢 ETAPA 3: FINALIZACIÓN"]
+        direction TB
+        E3P1["7. Estabilización<br/>❄️ Enfriamiento 20°C<br/>Estructura molecular fijada"]
+        E3P2["8. Control Final<br/>✅ Verificación COVENIN<br/>Espesores y resistencia"]
+        E3P3["📦 Producto Terminado<br/>Tubería PVC/CPVC<br/>Lista para distribución"]
+        
+        E3P1 --> E3P2 --> E3P3
+    end
+    
+    subgraph ANALISIS5M["📋 ANÁLISIS 5M - Factores Clave"]
+        direction LR
+        M1["🟦 Materiales<br/>PVC/CPVC recuperados"]
+        M2["🟨 Mano de Obra<br/>Estudiantes/Operarios"]
+        M3["🟥 Maquinaria<br/>Molino, Extrusora, Dado"]
+        M4["🟩 Método<br/>Parámetros técnicos"]
+        M5["🟪 Medio Ambiente<br/>Control gases/residuos"]
+    end
+    
+    ETAPA1 -->|Materiales Preparados| ETAPA2
+    ETAPA2 -->|Tubo Conformado| ETAPA3
+    
+    M1 -.->|Suministra| ETAPA1
+    M2 -.->|Opera| ETAPA1
+    M2 -.->|Controla| ETAPA2
+    M3 -.->|Procesa| ETAPA2
+    M4 -.->|Define| ETAPA2
+    M3 -.->|Calibra| ETAPA3
+    M5 -.->|Regula| ETAPA2
+    M5 -.->|Enfría| ETAPA3
+    
+    style ETAPA1 fill:#ebf5fb,stroke:#3498db,stroke-width:3px
+    style ETAPA2 fill:#fef5e7,stroke:#e67e22,stroke-width:3px
+    style ETAPA3 fill:#e8f8f5,stroke:#27ae60,stroke-width:3px
+    style E3P3 fill:#d5f5e3,stroke:#229954,stroke-width:4px
+    style ANALISIS5M fill:#f8f9fa,stroke:#764ba2,stroke-width:2px
+    style E2P1 fill:#fadbd8,stroke:#e74c3c,stroke-width:2px
+            </div>
+        </div>
+        
+        <!-- 5M Analysis Section -->
+        <div class="five-m-section">
+            <div class="section-title">📋 ANÁLISIS 5M - Factores Críticos del Proceso</div>
+            <div class="five-m-grid">
+                <div class="five-m-card mano">
+                    <div class="m-title">🟨 1. Mano de Obra (Men)</div>
+                    <div class="m-content">Estudiantes e investigadores encargados de la formulación y operadores de planta para el manejo de la extrusora y control de calidad.</div>
+                </div>
+                
+                <div class="five-m-card maquinaria">
+                    <div class="m-title">🟥 2. Maquinaria (Machine)</div>
+                    <div class="m-content">Línea de producción compuesta por molino de cuchillas, balanza de precisión, extrusora monohusillo, dado circular y tanque de calibración.</div>
+                </div>
+                
+                <div class="five-m-card materiales">
+                    <div class="m-title">🟦 3. Materiales (Material)</div>
+                    <div class="m-content">Desechos plásticos de PVC (policloruro de vinilo) y CPVC (policloruro de vinilo clorado) recuperados post-industriales.</div>
+                </div>
+                
+                <div class="five-m-card metodo">
+                    <div class="m-title">🟩 4. Método (Method)</div>
+                    <div class="m-content">Parámetros técnicos de extrusión, control de temperaturas 185-195°C, cálculos de mezcla para resistencia al agua caliente.</div>
+                </div>
+                
+                <div class="five-m-card ambiente">
+                    <div class="m-title">🟪 5. Medio Ambiente (Milieu)</div>
+                    <div class="m-content">Condiciones de seguridad en la planta, control de gases de extrusión, gestión de residuos de molienda, agua de enfriamiento a 20°C.</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="connections-legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #3498db;"></div>
+                <span>Flujo de Preparación</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #e67e22;"></div>
+                <span>Flujo de Procesamiento</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #27ae60;"></div>
+                <span>Flujo de Finalización</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #9b59b6; border: 2px dashed #9b59b6;"></div>
+                <span>Influencia 5M (punteada)</span>
+            </div>
+        </div>
+        
+        <div class="footer-note">
+            <strong>Proceso de 8 pasos organizado en 3 etapas críticas | Control de calidad por normas COVENIN 656/2530</strong>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#e8f6f3',
+                primaryTextColor: '#2c3e50',
+                primaryBorderColor: '#667eea',
+                lineColor: '#566573',
+                secondaryColor: '#fef9e7',
+                tertiaryColor: '#ebf5fb',
+                fontFamily: 'Segoe UI, sans-serif',
+                fontSize: '13px'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis',
+                padding: 15,
+                nodeSpacing: 40,
+                rankSpacing: 50
+            }
+        });
+    </script>
+</body>
+</html>
