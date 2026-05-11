@@ -231,10 +231,31 @@
 <hr>
 <h2>DIAGRAMAS DE PROCESO Y ARQUITECTURA</h2>
 <h3>1. Arquitectura de la Aplicación Centralizada</h3>
-<pre>Parse error on line 4:
-...        subgraph "Capa de Acceso"    
----------------------^
-Expecting 'SEMI', 'NEWLINE', 'SPACE', 'EOF', 'GRAPH', 'DIR', 'TAGEND', 'TAGSTART', 'UP', 'DOWN', 'subgraph', 'end', 'SQE', 'PE', '-)', 'DIAMOND_STOP', 'MINUS', '--', 'ARROW_POINT', 'ARROW_CIRCLE', 'ARROW_CROSS', 'ARROW_OPEN', 'DOTTED_ARROW_POINT', 'DOTTED_ARROW_CIRCLE', 'DOTTED_ARROW_CROSS', 'DOTTED_ARROW_OPEN', '==', 'THICK_ARROW_POINT', 'THICK_ARROW_CIRCLE', 'THICK_ARROW_CROSS', 'THICK_ARROW_OPEN', 'PIPE', 'STYLE', 'LINKSTYLE', 'CLASSDEF', 'CLASS', 'CLICK', 'DEFAULT', 'NUM', 'PCT', 'COMMA', 'ALPHA', 'COLON', 'BRKT', 'DOT', 'PUNCTUATION', 'UNICODE_TEXT', 'PLUS', 'EQUALS', 'MULT', got 'STR'</pre><h3>2. Flujo de Procesamiento Asíncrono</h3>
+<div class="mermaid">
+graph TD
+    User((Usuario Fibex)) --> FlutterApp[Flutter Desktop App]
+    
+    subgraph "Capa de Acceso"
+        FlutterApp --> Auth[Auth Layer: JWT/RBAC]
+    end
+
+    subgraph "Backend Centralizado (Dart)"
+        Auth --> API[API Gateway / Controllers]
+        API --> Logic[Business Logic / Services]
+        Logic --> Workers[Isolates / Background Jobs]
+    end
+
+    subgraph "Persistencia y Mensajería"
+        Workers --> Redis[(Redis / BullMQ)]
+        VSA --> DB[(PostgreSQL Multitenant)]
+        VSA --> Drive[Google Drive / Storage]
+    end
+
+    subgraph "Fuentes de Datos Externas"
+        Workers --> Gemini[Google Gemini AI]
+        VSA --> SAEDB[(Base de Datos SAE)]
+    end
+</div><h3>2. Flujo de Procesamiento Asíncrono</h3>
 <div class="mermaid">sequenceDiagram
     participant U as Usuario (Flutter)
     participant B as Backend (API)
