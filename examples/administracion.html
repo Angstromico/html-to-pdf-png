@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administracion</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px auto;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #2c3e50;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.4em;
+            color: #27ae60;
+        }
+
+        p {
+            margin-bottom: 1em;
+            font-size: 1.1em;
+        }
+
+        ul, ol {
+            margin-bottom: 1em;
+            padding-left: 2em;
+        }
+
+        li {
+            margin-bottom: 0.5em;
+            font-size: 1.1em;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1em 0;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 1em;
+            margin: 1em 0;
+            font-style: italic;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1em 0;
+            font-size: 1em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .mermaid {
+            background: white;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        @media print {
+            body {
+                background: white;
+                max-width: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 20px;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Informe de Factibilidad Técnica: Aplicación Centralizada “Fibex One” (Flutter Desktop)</h1>
+<h2>Personas involucradas o departamentos a contactar:</h2>
+<ul>
+<li><strong>Auditoría interna:</strong> Validación de procesos de trazabilidad y materiales.</li>
+<li><strong>Gestión y procesos:</strong> Definición de flujos operativos y reglas de negocio.</li>
+<li><strong>Conciliaciones:</strong> Usuarios clave del módulo de conciliación bancaria y OCR.</li>
+<li><strong>Administración:</strong> Gestión de reportes financieros y KPIs.</li>
+<li><strong>Cobranzas:</strong> Seguimiento de pagos y recaudación.</li>
+<li><strong>Otros:</strong> Departamentos técnicos de TI e infraestructura.</li>
+</ul>
+<h2>Descripción del proyecto:</h2>
+<h3>Resumen ejecutivo</h3>
+<p>El proyecto evoluciona de la simple migración de herramientas aisladas hacia la creación de una <strong>Súper Aplicación Centralizada (“Fibex One”)</strong>. Esta plataforma unificará el ecosistema de software de Fibex (integrando tanto el actual <code>filter_system</code> como las capacidades de <code>SAE Plus.exe</code>) bajo una arquitectura única de escritorio en <strong>Flutter</strong>. El objetivo es proporcionar una consola operativa total para todos los departamentos (Auditoría, Conciliaciones, Administración, Cobranzas), eliminando la deuda técnica de Electron, protegiendo los accesos mediante RBAC y optimizando el manejo de datos masivos mediante un motor de filtrado avanzado y un gestor de descargas inteligente.</p>
+<h3>Consolidación de Ecosistemas (Filter System + SAE Plus.exe)</h3>
+<p>La nueva arquitectura absorberá las funcionalidades de ambas plataformas actuales:</p>
+<ul>
+<li><strong>Módulo de Procesamiento Inteligente (ex Filter System):</strong> OCR con Gemini, auditorías de trazabilidad ONT y procesamiento masivo de Excel/PDF.</li>
+<li><strong>Módulo de Reportes Administrativos (ex SAE Plus.exe):</strong> Generación de reportes de cobranza, conciliación y estados de cuenta con conexión directa a base de datos.</li>
+</ul>
+<h3>Limitaciones de la arquitectura actual (Consolidada)</h3>
+<ol>
+<li><strong>Dualidad de Tecnologías:</strong> Mantenimiento de aplicaciones separadas en React (Web) y Electron (Desktop), duplicando esfuerzos de despliegue.</li>
+<li><strong>Vulnerabilidad de Seguridad:</strong> Landing pages desprotegidas e inyecciones SQL detectadas en reportes por interpolación directa de parámetros.</li>
+<li><strong>Sobrecarga de Electron:</strong> Consumo excesivo de RAM (~250MB por instancia) para tareas que Flutter realiza con &lt;50MB.</li>
+<li><strong>Fragmentación de Descargas:</strong> Los archivos generados se dispersan en carpetas temporales sin un control centralizado ni integración nativa con la nube (Drive).</li>
+<li><strong>Filtros Rígidos:</strong> La incapacidad de realizar filtrados complejos y dinámicos sobre operaciones cruzadas (SAE vs SmartOLT) limita la capacidad de análisis rápido.</li>
+</ol>
+<hr>
+<h2>ANÁLISIS TÉCNICO</h2>
+<h3>Especificaciones técnicas</h3>
+<ul>
+<li><strong>Frontend (Escritorio):</strong> <strong>Flutter Desktop (Windows/macOS/Linux)</strong>. Compilación AOT (Ahead-of-Time) para un rendimiento nativo, eliminando el runtime de Chromium.</li>
+<li><strong>Backend Centralizado:</strong> Arquitectura de alto rendimiento basada en <strong>Dart (Server-side)</strong>. Permite el uso de un stack unificado, compartiendo modelos de datos y lógica de validación entre cliente y servidor.</li>
+<li><strong>Gestor de Descargas Inteligente:</strong> Módulo centralizado para el manejo de archivos generados, con limpieza automática de temporales e integración segura con Google Drive API.</li>
+<li><strong>Motor de Filtrado Complejo:</strong> Capacidad de aplicar filtros lógicos multinivel (Exacto, Difuso, Sufijos) sobre millones de registros en memoria mediante hilos de ejecución aislados.</li>
+<li><strong>Procesamiento Multihilo:</strong> Uso de <strong>Isolates (Dart)</strong> para ejecutar tareas pesadas de filtrado y OCR en hilos independientes, maximizando el uso de CPU sin bloquear la concurrencia.</li>
+<li><strong>Base de Datos Segura:</strong> PostgreSQL con parámetros preparados (eliminando riesgos de inyección SQL detectados en la arquitectura anterior).</li>
+<li><strong>IA:</strong> Integración continua para OCR y análisis predictivo.</li>
+</ul>
+<hr>
+<h3>Módulos Estrella de la “Aplicación”</h3>
+<h4>1. Gestor de Descargas Unificado</h4>
+<p>A diferencia del sistema actual donde los archivos se pierden en carpetas temporales, “Fibex One” implementará:</p>
+<ul>
+<li><strong>Consola de Historial:</strong> Un panel central donde cada usuario ve sus archivos generados (Excel, PDF, ZIP), su estado de procesamiento y tamaño.</li>
+<li><strong>Pipeline de Destino:</strong> Capacidad de configurar reglas de guardado automático (Local, Servidor de Archivos o Google Drive) con un solo clic.</li>
+<li><strong>Auto-Limpieza Inteligente:</strong> Sistema que purga archivos temporales locales después de N días para mantener la salud del almacenamiento del equipo.</li>
+</ul>
+<h4>2. Motor de Filtrado y Operaciones Complejas</h4>
+<p>Para manejar la “Big Data” de Fibex sin bloquear la interfaz:</p>
+<ul>
+<li><strong>Procesamiento en Segundo Plano (Isolates):</strong> Los filtros pesados sobre miles de registros se ejecutan en hilos separados de Flutter (Isolates), garantizando que la aplicación nunca se “congele” durante el cálculo.</li>
+<li><strong>Exportación Segmentada:</strong> Opción de exportar solo los resultados filtrados hacia cualquiera de los módulos de la aplicación.</li>
+</ul>
+<h3>Planteamiento del problema</h3>
+<p>Fibex Telecom maneja volúmenes masivos de datos operativos (comprobantes, notas de servicio, inventario ONT) que actualmente se procesan mediante herramientas web dispersas. La falta de una plataforma centralizada genera ineficiencias operativas, riesgos de integridad de datos y una superficie de ataque innecesariamente amplia al no contar con perímetros de seguridad definidos para cada departamento.</p>
+<h3>Alcance</h3>
+<ul>
+<li><strong>Unificación Total:</strong> Fusión de <code>SAE Plus</code> y <code>Filter System</code> en un solo binario instalable.</li>
+<li><strong>Módulo de Descargas Centralizado:</strong> Historial de archivos generados, gestión de carpetas de destino y subida automática.</li>
+<li><strong>Filtros de Operaciones Complejas:</strong> Herramienta de búsqueda global que permite filtrar por múltiples criterios (Fecha, Franquicia, Estado de Red, Referencia Bancaria) a través de todos los módulos.</li>
+<li><strong>Seguridad RBAC &amp; Auditoría:</strong> Control total de quién puede generar reportes de cobranza vs quién puede auditar materiales.</li>
+<li><strong>Intervención Humana Controlada:</strong> Interfaces dedicadas para la validación de discrepancias detectadas por IA.</li>
+</ul>
+<h3>Limitaciones</h3>
+<ul>
+<li><strong>Dependencia de APIs Externas:</strong> El rendimiento del OCR sigue sujeto a las cuotas y latencia de Google Gemini.</li>
+<li><strong>Curva de Aprendizaje:</strong> Transición de entorno Web a una aplicación de escritorio para el usuario final.</li>
+<li><strong>Esfuerzo de Migración:</strong> Requiere la refactorización de lógica compleja de procesamiento de archivos para adaptarla al modelo asíncrono/multihilo.</li>
+</ul>
+<h3>Conclusión Técnica</h3>
+<p>La creación de una “Aplicación” es la solución definitiva para Fibex. No solo resuelve los problemas de rendimiento (ahorro del 70% de RAM vs Electron) y seguridad (eliminación de inyecciones SQL y accesos anónimos), sino que proporciona un entorno de trabajo unificado y profesional para todos los departamentos. La tecnología Flutter permite esta centralización con un solo código fuente mantenible a largo plazo.</p>
+<h3>Recomendación Ejecutiva</h3>
+<p>Proceder con la unificación inmediata de ambos proyectos. La inversión en una sola plataforma robusta reducirá los costes de mantenimiento a la mitad y eliminará los riesgos críticos de seguridad identificados.</p>
+<h3>Veredicto de Viabilidad</h3>
+<p><strong>EXTREMADAMENTE VIABLE (ESTRATÉGICO).</strong> La consolidación no es solo una mejora técnica, es una transformación operativa.</p>
+<hr>
+<h2>DIAGRAMAS DE PROCESO Y ARQUITECTURA</h2>
+<h3>1. Arquitectura de la Aplicación Centralizada</h3>
+<pre>Parse error on line 4:
+...        subgraph "Capa de Acceso"    
+---------------------^
+Expecting 'SEMI', 'NEWLINE', 'SPACE', 'EOF', 'GRAPH', 'DIR', 'TAGEND', 'TAGSTART', 'UP', 'DOWN', 'subgraph', 'end', 'SQE', 'PE', '-)', 'DIAMOND_STOP', 'MINUS', '--', 'ARROW_POINT', 'ARROW_CIRCLE', 'ARROW_CROSS', 'ARROW_OPEN', 'DOTTED_ARROW_POINT', 'DOTTED_ARROW_CIRCLE', 'DOTTED_ARROW_CROSS', 'DOTTED_ARROW_OPEN', '==', 'THICK_ARROW_POINT', 'THICK_ARROW_CIRCLE', 'THICK_ARROW_CROSS', 'THICK_ARROW_OPEN', 'PIPE', 'STYLE', 'LINKSTYLE', 'CLASSDEF', 'CLASS', 'CLICK', 'DEFAULT', 'NUM', 'PCT', 'COMMA', 'ALPHA', 'COLON', 'BRKT', 'DOT', 'PUNCTUATION', 'UNICODE_TEXT', 'PLUS', 'EQUALS', 'MULT', got 'STR'</pre><h3>2. Flujo de Procesamiento Asíncrono</h3>
+<div class="mermaid">sequenceDiagram
+    participant U as Usuario (Flutter)
+    participant B as Backend (API)
+    participant Q as Cola (Redis)
+    participant W as Worker (Proceso)
+    participant S as Servicios (AI/DB)
+
+    U->>B: Solicitud de Operación / Subida
+    B->>B: Validar Permisos (RBAC)
+    B->>Q: Encolar Tarea
+    B-->>U: Retornar Job ID (UI no se bloquea)
+
+    Note over W,S: Procesamiento Multihilo
+    Q->>W: Tomar Tarea
+    W->>S: Consultar DB / OCR Gemini
+    S-->>W: Datos Crudos
+    W->>W: Generar Excel / Aplicar Filtros
+
+    W->>B: Notificar Finalización
+    U->>B: Consultar Estatus / Polling
+    B-->>U: Link de Descarga / Resultado</div><hr>
+<h2>PROPUESTA DE FASES DE CONSOLIDACIÓN</h2>
+<p>Para garantizar una transición sin fricciones, se propone un despliegue en 4 fases estratégicas:</p>
+<h3>Fase 1: Cimientos y Seguridad Centralizada (Semanas 1-2)</h3>
+<ul>
+<li><strong>Infraestructura:</strong> Setup del proyecto Flutter Desktop y el nuevo Backend centralizado.</li>
+<li><strong>Seguridad:</strong> Implementación del módulo de Autenticación (Login) y esquema de roles RBAC.</li>
+<li><strong>DB:</strong> Diseño y migración de la base de datos Multitenant para usuarios y logs de auditoría.</li>
+</ul>
+<h3>Fase 2: Unificación Administrativa (Semanas 3-5)</h3>
+<ul>
+<li><strong>Reportes SAE:</strong> Migración de la lógica de <code>SAE Plus.exe</code> (Cobranza, Conciliación, Estados de Cuenta).</li>
+<li><strong>Motor de Filtrado:</strong> Implementación de la versión 1.0 del motor de búsqueda y filtros complejos sobre la base de datos.</li>
+<li><strong>Descargas:</strong> Lanzamiento del Gestor de Descargas básico (local).</li>
+</ul>
+<h3>Fase 3: Inteligencia y Auditoría (Semanas 6-8)</h3>
+<ul>
+<li><strong>Procesamiento IA:</strong> Migración de los módulos de OCR Gemini y Auditoría de Trazabilidad.</li>
+<li><strong>Intervención:</strong> Creación de las interfaces para la validación humana de discrepancias.</li>
+</ul>
+<h3>Fase 4: Optimización y Lanzamiento (Semanas 9-10)</h3>
+<ul>
+<li><strong>QA:</strong> Pruebas de estrés de procesamiento masivo y auditoría de seguridad final.</li>
+<li><strong>UX/UI:</strong> Refinamiento de la experiencia de usuario y temas visuales.</li>
+<li><strong>Despliegue:</strong> Lanzamiento gradual por departamentos (Canary Release).</li>
+</ul>
+
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            fontFamily: 'arial',
+            fontSize: 14
+        });
+    </script>
+</body>
+</html>
