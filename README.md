@@ -94,6 +94,43 @@ npx ts-node src/html-to-png.ts ./examples/example.html
 
 Results will be saved to the `dist/` folder.
 
+## NPM Scripts
+
+This repository includes several npm scripts for common workflows.
+
+- `npm run build`
+  - Compile TypeScript source files into `build/`.
+- `npm run pdf`
+  - Convert one HTML file to PDF using the compiled script.
+  - Example: `npm run pdf -- ./examples/example.html`
+- `npm run png`
+  - Convert one HTML file to PNG using the compiled script.
+  - Example: `npm run png -- ./examples/example.html`
+- `npm run pdf:dev`
+  - Run the HTML-to-PDF converter directly via `ts-node` without building.
+- `npm run png:dev`
+  - Run the HTML-to-PNG converter directly via `ts-node` without building.
+- `npm run md-to-html`
+  - Convert a Markdown file to HTML using the compiled script.
+  - Example: `npm run md-to-html -- ./examples/administracion.md`
+- `npm run md-to-html:dev`
+  - Run the Markdown-to-HTML converter directly via `ts-node`.
+- `npm run png-to-pdf`
+  - Batch convert all PNG files in a directory to PDF.
+  - Example: `npm run png-to-pdf -- -i ./dist -o ./dist`
+- `npm run png-to-pdf:dev`
+  - Run the PNG-to-PDF batch converter directly via `ts-node`.
+- `npm run batch:png`
+  - Batch convert all HTML files in a directory to PNG and skip already-existing outputs.
+  - Example: `npm run batch:png -- -i ./examples -o ./dist`
+- `npm run batch:png:dev`
+  - Run the HTML-to-PNG batch converter directly via `ts-node`.
+- `npm run batch:pdf`
+  - Batch convert all HTML files in a directory to PDF and skip already-existing outputs.
+  - Example: `npm run batch:pdf -- -i ./examples -o ./dist`
+- `npm run batch:pdf:dev`
+  - Run the HTML-to-PDF batch converter directly via `ts-node`.
+
 ## CLI Usage
 
 ### Development (TypeScript)
