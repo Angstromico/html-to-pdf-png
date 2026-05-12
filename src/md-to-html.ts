@@ -21,8 +21,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import MarkdownIt from 'markdown-it';
-// @ts-ignore - markdown-it-mermaid doesn't have TypeScript definitions
-import markdownItMermaid from 'markdown-it-mermaid';
 
 interface ParsedArgs {
   inputFile: string;
@@ -256,30 +254,42 @@ function createHtmlTemplate(title: string, bodyContent: string): string {
 async function convertMarkdownToHtml(inputPath: string, outputPath: string, title: string): Promise<void> {
   try {
     // Read the markdown file
-    const markdownContent = fs.readFileSync(inputPath, 'utf-8');
+    let markdownContent = fs.readFileSync(inputPath, 'utf-8');
 
-    // Initialize markdown-it with mermaid plugin
+    // Pre-process: Extract and protect mermaid code blocks BEFORE any markdown processing
+    // We'll store them in placeholders and restore them after markdown rendering
+    const mermaidBlocks: string[] = [];
+    let counter = 0;
+    
+    // Replace mermaid code blocks with temporary placeholders
+    // Use [\s\S] to match any character including newlines (works with both \n and \r\n)
+    markdownContent = markdownContent.replace(/```mermaid\s*([\s\S]*?)```/g, (match, code) => {
+      // Store the original mermaid code
+      mermaidBlocks.push(code.trim());
+      // Return a unique placeholder that won't be touched by markdown-it
+      const placeholder = `MERMAID_BLOCK_${counter}_PLACEHOLDER`;
+      counter++;
+      return placeholder;
+    });
+
+    // Initialize markdown-it
     const md = new MarkdownIt({
       html: true,
       linkify: true,
       typographer: true
     });
 
-    // Configure mermaid plugin
-    md.use(markdownItMermaid, {
-      startOnLoad: false, // We'll initialize manually
-      theme: 'default',
-      flowchart: {
-        useMaxWidth: true,
-        htmlLabels: true
-      },
-      sequence: {
-        useMaxWidth: true
-      }
-    });
-
     // Convert markdown to HTML
-    const htmlContent = md.render(markdownContent);
+    let htmlContent = md.render(markdownContent);
+
+    // Post-process: Replace placeholders with actual mermaid divs
+    mermaidBlocks.forEach((code, index) => {
+      const placeholder = `MERMAID_BLOCK_${index}_PLACEHOLDER`;
+      // Create the mermaid div with the original code preserved
+      const mermaidDiv = `<div class="mermaid">\n${code}\n</div>`;
+      // Replace both <p>placeholder</p> and standalone placeholder
+      htmlContent = htmlContent.replace(new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'), mermaidDiv);
+    });
 
     // Create the full HTML document
     const fullHtml = createHtmlTemplate(title, htmlContent);

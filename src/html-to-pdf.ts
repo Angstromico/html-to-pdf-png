@@ -127,13 +127,15 @@ async function convertHTMLToPDF(
     
     console.log('⏳ Waiting for Mermaid diagrams to render...');
     
-    // Wait for Mermaid diagrams to render
+    // Wait for Mermaid diagrams to render (with extended timeout for complex diagrams)
     await page.waitForFunction(() => {
       const mermaidElements: NodeListOf<Element> = document.querySelectorAll('.mermaid');
+      // If no mermaid elements, we're good
+      if (mermaidElements.length === 0) return true;
       const renderedElements: NodeListOf<Element> = document.querySelectorAll('.mermaid svg');
-      return renderedElements.length === mermaidElements.length && mermaidElements.length > 0;
+      return renderedElements.length === mermaidElements.length;
     }, {
-      timeout: 30000 // 30 seconds max
+      timeout: 60000 // 60 seconds for complex diagrams
     });
     
     // Wait for fonts to load (including Arial)
